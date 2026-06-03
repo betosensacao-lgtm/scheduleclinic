@@ -6,7 +6,7 @@ import { getCurrentUser } from "@/lib/queries";
 // patients, settings). Provides the role-aware sidebar around the content.
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
-  if (!user) redirect("/auth/login");
+  if (!user) redirect("/logout");
 
   return (
     <div className="flex min-h-screen bg-[#F4FAFA]">
