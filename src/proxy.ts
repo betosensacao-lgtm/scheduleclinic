@@ -10,8 +10,10 @@ const PROTECTED_SEGMENTS = ["/dashboard", "/appointments", "/patients", "/settin
 function isProtectedPath(pathname: string) {
   return PROTECTED_SEGMENTS.some(
     (seg) => pathname === seg || pathname.startsWith(seg + "/") ||
-      // handle /pt/... prefix
-      pathname === "/pt" + seg || pathname.startsWith("/pt" + seg + "/")
+      // handle /{locale}/... prefix (en, pt, es)
+      /^\/(en|pt|es)/.test(pathname) && (
+        pathname.endsWith(seg) || pathname.includes(seg + "/")
+      )
   );
 }
 
@@ -54,6 +56,13 @@ export default async function proxy(request: NextRequest) {
     if (user && isAuthPath(pathname)) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
+
+    // Auth pages live OUTSIDE the [locale] segment — serve them directly,
+    // bypassing next-intl's locale rewriting (which would otherwise 404 them).
+    if (isAuthPath(pathname)) {
+      return response;
+    }
+    // Protected paths with a valid user fall through to next-intl below.
   }
 
   return intlMiddleware(request);
