@@ -57,6 +57,12 @@ export const triageUrgencyEnum = pgEnum("urgency_classification", ["RED", "YELLO
 // Maps to existing DB enum "triage_status"
 export const triageStatusEnum = pgEnum("triage_status", ["PENDING", "REVIEWED", "ARCHIVED"]);
 
+export const whatsappSessionStatusEnum = pgEnum("whatsapp_session_status", [
+  "active",
+  "completed",
+  "abandoned",
+]);
+
 // ─── Tables ──────────────────────────────────────────────────────────────────
 
 export const users = pgTable("users", {
@@ -94,6 +100,16 @@ export const clinics = pgTable("clinics", {
   zipCode: text("zip_code"),
   country: text("country").default("US"),
   ownerId: uuid("owner_id").notNull().references(() => users.id),
+  // Stripe billing
+  stripeCustomerId: text("stripe_customer_id"),
+  subscriptionId: text("subscription_id"),
+  subscriptionStatus: text("subscription_status"),
+  plan: text("plan").notNull().default("free"),
+  // WhatsApp Business integration
+  whatsappPhoneNumberId: text("whatsapp_phone_number_id"),
+  whatsappAccessToken: text("whatsapp_access_token"),
+  whatsappWabaId: text("whatsapp_waba_id"),
+  whatsappVerified: boolean("whatsapp_verified").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -137,6 +153,8 @@ export const triageSessions = pgTable("triage_sessions", {
   messageCount: integer("message_count").default(0),
   modelUsed: text("model_used"),
   status: triageStatusEnum("status").notNull().default("PENDING"),
+  source: text("source").default("web"), // 'web', 'whatsapp', 'api'
+  adminNotes: text("admin_notes"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -207,6 +225,30 @@ export const preAnamnesis = pgTable("pre_anamnesis", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const whatsappSessions = pgTable("whatsapp_sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clinicId: uuid("clinic_id").notNull().references(() => clinics.id),
+  phoneNumber: text("phone_number").notNull(),
+  patientName: text("patient_name"),
+  patientEmail: text("patient_email"),
+  triageSessionId: uuid("triage_session_id").references(() => triageSessions.id),
+  appointmentId: uuid("appointment_id").references(() => appointments.id),
+  status: whatsappSessionStatusEnum("status").notNull().default("active"),
+  currentStep: text("current_step").default("welcome"),
+  contextData: jsonb("context_data"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const clinicContext = pgTable("clinic_context", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clinicId: uuid("clinic_id").notNull().references(() => clinics.id, { onDelete: "cascade" }),
+  key: text("key").notNull(),
+  content: text("content").notNull(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // ─── Relations ────────────────────────────────────────────────────────────────
 
 export const clinicsRelations = relations(clinics, ({ one, many }) => ({
@@ -241,4 +283,10 @@ export const appointmentsRelations = relations(appointments, ({ one }) => ({
 export const preAnamnesisRelations = relations(preAnamnesis, ({ one }) => ({
   appointment: one(appointments, { fields: [preAnamnesis.appointmentId], references: [appointments.id] }),
   patient: one(users, { fields: [preAnamnesis.patientId], references: [users.id] }),
+}));
+
+export const whatsappSessionsRelations = relations(whatsappSessions, ({ one }) => ({
+  clinic: one(clinics, { fields: [whatsappSessions.clinicId], references: [clinics.id] }),
+  triageSession: one(triageSessions, { fields: [whatsappSessions.triageSessionId], references: [triageSessions.id] }),
+  appointment: one(appointments, { fields: [whatsappSessions.appointmentId], references: [appointments.id] }),
 }));

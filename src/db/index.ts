@@ -4,7 +4,11 @@ import * as schema from "./schema";
 
 // prepare: false is required for Supabase Transaction Pooler (port 6543)
 // which does not support PostgreSQL prepared statements
-const client = postgres(process.env.DATABASE_URL!, { prepare: false });
+const client = postgres(process.env.DATABASE_URL!, {
+  prepare: false,
+  connect_timeout: 10,
+  max: 5,
+});
 export const db = drizzle(client, { schema });
 
 export type Database = typeof db;

@@ -25,7 +25,6 @@ const config: Config = {
           light: "#055870",
         },
         sky: "#E0F4F4",
-        accent: "#EE9B00",
         warm: "#CA6702",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -49,7 +48,7 @@ const config: Config = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
+          DEFAULT: "#EE9B00",
           foreground: "hsl(var(--accent-foreground))",
         },
         card: {
