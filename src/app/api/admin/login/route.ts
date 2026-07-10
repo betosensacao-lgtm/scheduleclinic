@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { createSessionToken, COOKIE_NAME } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
@@ -11,8 +10,8 @@ export async function POST(request: NextRequest) {
     }
 
     const token = await createSessionToken();
-    const cookieStore = await cookies();
-    cookieStore.set(COOKIE_NAME, token, {
+    const response = NextResponse.json({ success: true });
+    response.cookies.set(COOKIE_NAME, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
@@ -20,7 +19,7 @@ export async function POST(request: NextRequest) {
       maxAge: 60 * 60 * 24,
     });
 
-    return NextResponse.json({ success: true });
+    return response;
   } catch {
     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
