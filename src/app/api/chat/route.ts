@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       messages: [...historyMessages, new HumanMessage(message)],
       sessionId,
       clinicId,
-    });
+    }, sessionId);
 
     const lastMessage = result.messages[result.messages.length - 1];
     const reply =
