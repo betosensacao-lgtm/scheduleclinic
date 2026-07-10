@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clínica Vitalis — Cuidado que transforma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: Inter, system-ui, sans-serif;
+  color: #1A2B34;
+  background: #fff;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+/* Top bar */
+.top-bar {
+  background: #0B3B3B; color: #C8E0E0; font-size: 0.82rem;
+  padding: 10px 0; display: none;
+}
+.top-bar-inner {
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 1140px; margin: 0 auto; padding: 0 24px;
+}
+.top-bar a { color: #E8B84B; font-weight: 500; transition: color 0.2s; }
+.top-bar a:hover { color: #F0D070; }
+.top-bar .divider { color: #4A7A7A; margin: 0 12px; }
+@media (min-width: 769px) { .top-bar { display: block; } }
+
+/* Header */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: #fff; border-bottom: 1px solid #E8EEEE;
+}
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; max-width: 1140px; margin: 0 auto; padding: 0 24px;
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.5rem; font-weight: 700; color: #0B6E6E;
+}
+.logo-mark {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: #0B6E6E; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Inter, sans-serif; font-size: 1.2rem; font-weight: 700;
+}
+.nav { display: flex; gap: 28px; align-items: center; list-style: none; }
+.nav a {
+  font-size: 0.88rem; font-weight: 500; color: #4A6A72;
+  transition: color 0.2s; position: relative;
+}
+.nav a:hover { color: #0B6E6E; }
+.nav-cta {
+  padding: 10px 24px; border-radius: 8px;
+  background: #0B6E6E; color: #fff !important; font-weight: 600;
+  font-size: 0.88rem; transition: background 0.2s;
+}
+.nav-cta:hover { background: #095A5A !important; }
+.mobile-toggle { display: none; background: none; border: none; font-size: 1.6rem; color: #1A2B34; cursor: pointer; padding: 4px; }
+
+/* Hero */
+.hero {
+  padding: 80px 0 0; position: relative; overflow: hidden;
+  background: linear-gradient(180deg, #F4FAFA 0%, #EAF4F4 100%);
+}
+.hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.hero-label {
+  font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.15em; color: #0B6E6E; margin-bottom: 12px;
+}
+.hero h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 700;
+  color: #0B3B3B; line-height: 1.15; margin-bottom: 16px;
+}
+.hero h1 em { font-style: italic; color: #0B6E6E; }
+.hero p { font-size: 1.05rem; color: #5A7A82; max-width: 480px; margin-bottom: 32px; line-height: 1.7; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px; border-radius: 8px; border: none;
+  background: #E8B84B; color: #1A2B34; font-family: Inter, sans-serif;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.hero-cta:hover { background: #D9A93A; transform: translateY(-1px); }
+.hero-cta-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; border-radius: 8px;
+  border: 2px solid #0B6E6E; color: #0B6E6E; font-weight: 600;
+  font-size: 1rem; transition: background 0.2s;
+}
+.hero-cta-outline:hover { background: rgba(11,110,110,0.06); }
+.hero-image {
+  width: 100%; aspect-ratio: 4/3; border-radius: 16px;
+  background: linear-gradient(135deg, #D4E8E8, #C0DDDD);
+  display: flex; align-items: center; justify-content: center;
+  color: #4A7A7A; font-size: 0.95rem; position: relative; overflow: hidden;
+}
+.hero-image::after {
+  content: ""; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230B6E6E' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Hero stats */
+.hero-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  margin-top: 64px; border-top: 1px solid #D8E8E8;
+}
+.hero-stat {
+  padding: 24px 16px; text-align: center;
+  border-right: 1px solid #D8E8E8;
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.6rem; font-weight: 700; color: #0B6E6E; line-height: 1;
+}
+.hero-stat-label { font-size: 0.8rem; color: #5A7A82; margin-top: 6px; }
+
+/* Section shared */
+.section { padding: 80px 0; }
+.section-center { text-align: center; }
+.section-label {
+  font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.15em; color: #0B6E6E; margin-bottom: 8px;
+}
+.section-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: #0B3B3B;
+  margin-bottom: 12px; line-height: 1.2;
+}
+.section-sub { font-size: 1rem; color: #5A7A82; max-width: 600px; margin: 0 auto 48px; line-height: 1.6; }
+
+/* Services */
+.serv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.serv-card {
+  background: #fff; border-radius: 14px; padding: 32px 20px;
+  border: 1px solid #E8EEEE; text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.serv-card:hover {
+  border-color: #C8DDDD; box-shadow: 0 8px 24px rgba(11,110,110,0.06);
+  transform: translateY(-2px);
+}
+.serv-icon {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: #F0F7F7; display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin: 0 auto 16px;
+}
+.serv-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; color: #0B3B3B; }
+.serv-card p { font-size: 0.85rem; color: #5A7A82; line-height: 1.5; }
+.serv-link {
+  display: inline-block; margin-top: 12px; font-size: 0.85rem;
+  color: #0B6E6E; font-weight: 600; transition: color 0.2s;
+}
+.serv-link:hover { color: #E8B84B; }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.about-image {
+  width: 100%; aspect-ratio: 4/3; border-radius: 16px;
+  background: linear-gradient(135deg, #D4E8E8, #C0DDDD);
+  display: flex; align-items: center; justify-content: center;
+  color: #4A7A7A; font-size: 0.95rem;
+}
+.about-bullets { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+.about-bullet {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.9rem; color: #4A6A72;
+}
+.about-bullet::before {
+  content: "✓"; width: 22px; height: 22px; border-radius: 50%;
+  background: #E0F0F0; color: #0B6E6E;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+}
+
+/* Offers */
+.offers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.offer-card {
+  border-radius: 14px; padding: 36px 32px;
+  border: 1px solid #E8EEEE; background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.offer-card:hover { border-color: #C8DDDD; box-shadow: 0 4px 16px rgba(11,110,110,0.04); }
+.offer-card.featured { background: #F4FAFA; border-color: #C8DDDD; }
+.offer-badge {
+  display: inline-block; padding: 4px 12px; border-radius: 20px;
+  background: #0B6E6E; color: #fff; font-size: 0.75rem;
+  font-weight: 600; margin-bottom: 12px;
+}
+.offer-card h3 { font-size: 1.15rem; font-weight: 600; color: #0B3B3B; margin-bottom: 8px; }
+.offer-card p { font-size: 0.9rem; color: #5A7A82; line-height: 1.6; margin-bottom: 16px; }
+.offer-card ul { list-style: none; font-size: 0.88rem; color: #4A6A72; margin-bottom: 20px; }
+.offer-card ul li { padding: 4px 0; padding-left: 20px; position: relative; }
+.offer-card ul li::before { content: "•"; position: absolute; left: 0; color: #0B6E6E; font-weight: 700; }
+
+/* Steps */
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; }
+.steps-grid::before {
+  content: ""; position: absolute; top: 28px; left: calc(12.5% + 12px);
+  right: calc(12.5% + 12px); height: 2px;
+  background: repeating-linear-gradient(90deg, #C8DDDD 0, #C8DDDD 8px, transparent 8px, transparent 16px);
+}
+.step-item { text-align: center; position: relative; }
+.step-num {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #0B6E6E; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px; font-weight: 700; font-size: 1.2rem; position: relative; z-index: 1;
+}
+.step-item h3 { font-size: 1rem; font-weight: 600; color: #0B3B3B; margin-bottom: 6px; }
+.step-item p { font-size: 0.85rem; color: #5A7A82; line-height: 1.5; }
+
+/* Testimonials */
+.test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.test-card {
+  background: #fff; border-radius: 14px; padding: 32px 24px;
+  border: 1px solid #E8EEEE;
+}
+.test-card .stars { color: #E8B84B; font-size: 0.9rem; margin-bottom: 12px; }
+.test-card blockquote {
+  font-size: 0.9rem; color: #4A6A72; line-height: 1.6;
+  font-style: italic; margin-bottom: 16px;
+}
+.test-author { display: flex; align-items: center; gap: 12px; }
+.test-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #E0F0F0; display: flex; align-items: center; justify-content: center;
+  color: #0B6E6E; font-weight: 600; font-size: 0.9rem;
+}
+.test-info strong { display: block; font-size: 0.9rem; color: #0B3B3B; }
+.test-info span { font-size: 0.8rem; color: #5A7A82; }
+
+/* Stats bar */
+.stats-bar {
+  background: #0B3B3B; color: #fff; padding: 48px 0;
+}
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+.stat-item-num {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2rem; font-weight: 700; line-height: 1;
+}
+.stat-item-label { font-size: 0.85rem; color: #A0C0C0; margin-top: 8px; }
+
+/* CTA section */
+.cta-section {
+  background: linear-gradient(135deg, #F4FAFA, #EAF4F4);
+  text-align: center; padding: 80px 0;
+}
+.cta-section h2 { max-width: 600px; margin: 0 auto 12px; }
+.cta-section p { color: #5A7A82; margin-bottom: 24px; }
+
+/* Contact + Map */
+.contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.contact-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.contact-item { }
+.contact-item h4 { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #5A7A82; margin-bottom: 4px; }
+.contact-item p { font-size: 0.95rem; color: #1A2B34; }
+.contact-map {
+  width: 100%; min-height: 300px; border-radius: 14px;
+  background: #E8F0F0; display: flex; align-items: center; justify-content: center;
+  color: #5A7A82; font-size: 0.9rem; border: 1px solid #D4E4E4;
+}
+
+/* Footer */
+.footer { background: #0B3B3B; color: #A0C0C0; padding: 48px 0 24px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; margin-bottom: 32px; }
+.footer-brand .logo { color: #fff; justify-content: center; margin-bottom: 12px; }
+.footer-brand p { font-size: 0.85rem; line-height: 1.6; }
+.footer h4 { color: #fff; font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; }
+.footer ul { list-style: none; }
+.footer ul li { margin-bottom: 8px; }
+.footer ul a { font-size: 0.85rem; transition: color 0.2s; }
+.footer ul a:hover { color: #E8B84B; }
+.footer-bottom {
+  border-top: 1px solid #1A5050; padding-top: 20px;
+  text-align: center; font-size: 0.8rem;
+}
+
+/* Chat widget */
+.chat-widget {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  display: flex; flex-direction: column; align-items: flex-end;
+}
+.chat-toggle {
+  width: 56px; height: 56px; border-radius: 50%; border: none;
+  background: #0B6E6E; color: #fff; font-size: 1.4rem; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(11,110,110,0.35);
+  transition: transform 0.2s, background 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.chat-toggle:hover { transform: scale(1.05); background: #095A5A; }
+.chat-toggle.open { background: #D14848; transform: rotate(90deg); }
+.chat-toggle.open:hover { background: #B83E3E; }
+.chat-frame {
+  display: none; margin-bottom: 12px; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.chat-frame.open { display: block; }
+.chat-frame iframe { width: 380px; height: 580px; border: none; display: block; }
+
+@media (max-width: 768px) {
+  .nav { display: none; position: fixed; top: 72px; left: 0; right: 0;
+    background: #fff; flex-direction: column; padding: 16px 24px;
+    gap: 16px; border-bottom: 1px solid #E8EEEE; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .nav.open { display: flex; }
+  .mobile-toggle { display: block; }
+  .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+  .hero-image { aspect-ratio: 16/9; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); margin-top: 40px; }
+  .hero-stat:nth-child(2) { border-right: none; }
+  .hero-stat:nth-child(1),
+  .hero-stat:nth-child(2) { border-bottom: 1px solid #D8E8E8; }
+  .serv-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .about-bullets { grid-template-columns: 1fr; }
+  .offers-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
+  .steps-grid::before { display: none; }
+  .test-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .contact-wrap { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .chat-frame iframe { width: calc(100vw - 48px); height: 480px; }
+  .chat-widget { bottom: 16px; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <span>📍 Rua Augusta, 1500 — Consolação, SP</span>
+    <span>
+      <a href="tel:+5511999998888">📞 (11) 99999-8888</a>
+      <span class="divider">|</span>
+      <span>🕐 Seg–Sex: 7h–20h | Sáb: 8h–14h</span>
+    </span>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark">V</span>
+      Clínica Vitalis
+    </a>
+    <button class="mobile-toggle" onclick="document.querySelector('.nav').classList.toggle('open')" aria-label="Menu">☰</button>
+    <ul class="nav">
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#contato">Contato</a></li>
+      <li><a href="#" class="nav-cta" onclick="event.preventDefault();toggleChat()">Agendar</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <div class="hero-label">— Atendimento humanizado</div>
+      <h1>Cuidado que <em>transforma</em> vidas,<br>perto de você</h1>
+      <p>Na Clínica Vitalis, cada paciente é único. Oferecemos atendimento médico humanizado com profissionais que realmente se importam com a sua saúde.</p>
+      <div class="hero-actions">
+        <button class="hero-cta" onclick="toggleChat()">
+          Agende sua consulta <span style="font-size:1.2em">→</span>
+        </button>
+        <a href="#servicos" class="hero-cta-outline">Nossos serviços</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <span>🏥 Clínica Vitalis</span>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">+15</div>
+      <div class="hero-stat-label">Anos de experiência</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">+8k</div>
+      <div class="hero-stat-label">Pacientes atendidos</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">98%</div>
+      <div class="hero-stat-label">Satisfação</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">+50</div>
+      <div class="hero-stat-label">Serviços</div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="section" id="servicos">
+  <div class="container section-center">
+    <div class="section-label">— Nossos Serviços</div>
+    <h2 class="section-title">Cuidamos de você em todas as fases</h2>
+    <p class="section-sub">Oferecemos um atendimento completo e humanizado para toda a família, do preventivo ao especializado.</p>
+    <div class="serv-grid">
+      <div class="serv-card">
+        <div class="serv-icon">❤️</div>
+        <h3>Cardiologia</h3>
+        <p>Prevenção e tratamento de doenças do coração com tecnologia de ponta.</p>
+        <a href="#" class="serv-link" onclick="event.preventDefault();toggleChat()">Agendar →</a>
+      </div>
+      <div class="serv-card">
+        <div class="serv-icon">🫁</div>
+        <h3>Pneumologia</h3>
+        <p>Cuidados completos para saúde respiratória e tratamento especializado.</p>
+        <a href="#" class="serv-link" onclick="event.preventDefault();toggleChat()">Agendar →</a>
+      </div>
+      <div class="serv-card">
+        <div class="serv-icon">🩺</div>
+        <h3>Clínico Geral</h3>
+        <p>Atendimento integral para toda a família, do preventivo ao tratamento.</p>
+        <a href="#" class="serv-link" onclick="event.preventDefault();toggleChat()">Agendar →</a>
+      </div>
+      <div class="serv-card">
+        <div class="serv-icon">🧠</div>
+        <h3>Neurologia</h3>
+        <p>Diagnóstico e acompanhamento de condições neurológicas complexas.</p>
+        <a href="#" class="serv-link" onclick="event.preventDefault();toggleChat()">Agendar →</a>
+      </div>
+      <div class="serv-card">
+        <div class="serv-icon">🦷</div>
+        <h3>Odontologia</h3>
+        <p>Saúde bucal completa com conforto e atendimento personalizado.</p>
+        <a href="#" class="serv-link" onclick="event.preventDefault();toggleChat()">Agendar →</a>
+      </div>
+      <div class="serv-card">
+        <div class="serv-icon">👶</div>
+        <h3>Pediatria</h3>
+        <p>Acompanhamento infantil humanizado, do nascimento à adolescência.</p>
+        <a href="#" class="serv-link" onclick="event.preventDefault();toggleChat()">Agendar →</a>
+      </div>
+      <div class="serv-card">
+        <div class="serv-icon">🦴</div>
+        <h3>Ortopedia</h3>
+        <p>Tratamento de lesões e condições musculoesqueléticas com excelência.</p>
+        <a href="#" class="serv-link" onclick="event.preventDefault();toggleChat()">Agendar →</a>
+      </div>
+      <div class="serv-card">
+        <div class="serv-icon">👁️</div>
+        <h3>Oftalmologia</h3>
+        <p>Cuidados completos com a visão, exames e tratamentos modernos.</p>
+        <a href="#" class="serv-link" onclick="event.preventDefault();toggleChat()">Agendar →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="section" id="sobre" style="background:#F8FAFA;padding-bottom:80px">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image">
+        <span>🏥 Nossa clínica</span>
+      </div>
+      <div>
+        <div class="section-label">— Sobre Nós</div>
+        <h2 class="section-title" style="margin-bottom:12px">Excelência em saúde com atendimento humanizado</h2>
+        <p style="color:#5A7A82;font-size:0.95rem;line-height:1.7;margin-bottom:8px">
+          A Clínica Vitalis é referência em atendimento médico na região da Consolação. 
+          Contamos com profissionais altamente capacitados e infraestrutura moderna para oferecer o melhor cuidado.
+        </p>
+        <p style="color:#5A7A82;font-size:0.95rem;line-height:1.7;margin-bottom:20px">
+          Garantimos um atendimento acessível e de qualidade para todos os nossos pacientes.
+        </p>
+        <div class="about-bullets">
+          <div class="about-bullet">Profissionais experientes</div>
+          <div class="about-bullet">Agendamento online</div>
+          <div class="about-bullet">Economia de custos</div>
+          <div class="about-bullet">Redução da ansiedade</div>
+          <div class="about-bullet">Suporte 24h online</div>
+          <div class="about-bullet">Conforto e bem-estar</div>
+        </div>
+        <button class="hero-cta" style="margin-top:24px" onclick="toggleChat()">
+          Fale conosco <span style="font-size:1.2em">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Offers -->
+<section class="section" style="padding-bottom:40px">
+  <div class="container section-center">
+    <div class="section-label">— Ofertas Especiais</div>
+    <h2 class="section-title">Promoções do mês</h2>
+    <p class="section-sub">Aproveite nossas ofertas especiais para cuidar da sua saúde com ainda mais vantagens.</p>
+    <div class="offers-grid" style="text-align:left">
+      <div class="offer-card featured">
+        <div class="offer-badge">Destaque</div>
+        <h3>Primeira Consulta — 15% OFF</h3>
+        <p>Sua primeira visita à Clínica Vitalis com 15% de desconto. Cuidar da sua saúde nunca foi tão acessível.</p>
+        <ul>
+          <li>Consulta médica completa</li>
+          <li>Avaliação personalizada</li>
+          <li>Recomendações de cuidados</li>
+        </ul>
+        <button class="hero-cta" onclick="toggleChat()">Aproveitar oferta</button>
+      </div>
+      <div class="offer-card">
+        <h3>Check-up Completo</h3>
+        <p>Pacote de exames e avaliações com preço especial. Cuide da sua saúde de forma preventiva.</p>
+        <ul>
+          <li>Exames laboratoriais</li>
+          <li>Avaliação cardiológica</li>
+          <li>Check-up geral</li>
+        </ul>
+        <button class="hero-cta" onclick="toggleChat()">Aproveitar oferta</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Steps -->
+<section class="section" style="padding-top:40px">
+  <div class="container section-center">
+    <div class="section-label">— Como Funciona</div>
+    <h2 class="section-title">Apenas 4 passos para sua saúde</h2>
+    <p class="section-sub">Simples, rápido e sem complicação. Veja como é fácil agendar e cuidar da sua saúde.</p>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <h3>Agende</h3>
+        <p>Entre em contato pelo chat ou telefone e escolha o melhor horário.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <h3>Visite</h3>
+        <p>Venha à nossa clínica e seja recebido com todo o conforto e cuidado.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <h3>Atendimento</h3>
+        <p>Receba o diagnóstico e tratamento personalizado com nossa equipe.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <h3>Acompanhamento</h3>
+        <p>Tenha suporte contínuo e recomendações para manter sua saúde em dia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" id="depoimentos" style="background:#F8FAFA">
+  <div class="container section-center">
+    <div class="section-label">— Depoimentos</div>
+    <h2 class="section-title">O que nossos pacientes dizem</h2>
+    <p class="section-sub">A satisfação dos nossos pacientes é o que nos motiva a oferecer o melhor atendimento.</p>
+    <div class="test-grid" style="text-align:left">
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Fui atendido pela equipe de cardiologia e fiquei impressionado com o cuidado e a atenção. Explicaram tudo detalhadamente e saí de lá confiante."</blockquote>
+        <div class="test-author">
+          <div class="test-avatar">JD</div>
+          <div class="test-info">
+            <strong>João Dias</strong>
+            <span>Cardiologia • Mar 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"A Clínica Vitalis foi essencial para o acompanhamento da saúde do meu filho. A pediatra é maravilhosa e o ambiente é acolhedor."</blockquote>
+        <div class="test-author">
+          <div class="test-avatar">AL</div>
+          <div class="test-info">
+            <strong>Ana Lima</strong>
+            <span>Pediatria • Fev 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Agendei pelo chat e foi super prático. Cheguei no horário, fui atendido rapidamente e o ortopedista resolveu meu problema. Recomendo!"</blockquote>
+        <div class="test-author">
+          <div class="test-avatar">CS</div>
+          <div class="test-info">
+            <strong>Carlos Souza</strong>
+            <span>Ortopedia • Jan 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats bar -->
+<section class="stats-bar">
+  <div class="container stats-grid">
+    <div>
+      <div class="stat-item-num">2.500+</div>
+      <div class="stat-item-label">Pacientes/ano</div>
+    </div>
+    <div>
+      <div class="stat-item-num">2019</div>
+      <div class="stat-item-label">Clínica do Ano</div>
+    </div>
+    <div>
+      <div class="stat-item-num">50+</div>
+      <div class="stat-item-label">Serviços</div>
+    </div>
+    <div>
+      <div class="stat-item-num">98%</div>
+      <div class="stat-item-label">Avaliações Positivas</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="section-label">— Agende agora</div>
+    <h2 class="section-title">Pronto para cuidar da sua saúde?</h2>
+    <p>Agende sua consulta online ou entre em contato pelo telefone.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="hero-cta" onclick="toggleChat()">
+        Agendar consulta <span style="font-size:1.2em">→</span>
+      </button>
+      <a href="tel:+5511999998888" class="hero-cta-outline">📞 (11) 99999-8888</a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section" id="contato">
+  <div class="container">
+    <div class="section-label section-center" style="text-align:center">— Contato</div>
+    <h2 class="section-title section-center" style="text-align:center">Entre em contato</h2>
+    <p class="section-sub" style="text-align:center">Estamos prontos para atender você e sua família.</p>
+    <div class="contact-wrap">
+      <div class="contact-info-grid">
+        <div class="contact-item">
+          <h4>📍 Endereço</h4>
+          <p>Rua Augusta, 1500<br>Consolação, SP — 01304-001</p>
+        </div>
+        <div class="contact-item">
+          <h4>📞 Telefone</h4>
+          <p>(11) 99999-8888</p>
+        </div>
+        <div class="contact-item">
+          <h4>📧 E-mail</h4>
+          <p>contato@vitalis.com.br</p>
+        </div>
+        <div class="contact-item">
+          <h4>🕐 Horários</h4>
+          <p>Seg–Sex: 7h às 20h<br>Sáb: 8h às 14h</p>
+        </div>
+      </div>
+      <div class="contact-map">
+        📍 Rua Augusta, 1500 — São Paulo, SP
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="justify-content:flex-start">
+          <span class="logo-mark">V</span>
+          Clínica Vitalis
+        </div>
+        <p style="margin-top:8px">Cuidado que transforma vidas. Sua saúde é a nossa prioridade.</p>
+      </div>
+      <div>
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#" onclick="event.preventDefault();toggleChat()">Cardiologia</a></li>
+          <li><a href="#" onclick="event.preventDefault();toggleChat()">Pediatria</a></li>
+          <li><a href="#" onclick="event.preventDefault();toggleChat()">Clínico Geral</a></li>
+          <li><a href="#" onclick="event.preventDefault();toggleChat()">Odontologia</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="tel:+5511999998888">📞 (11) 99999-8888</a></li>
+          <li><a href="mailto:contato@vitalis.com.br">📧 contato@vitalis.com.br</a></li>
+          <li>📍 Rua Augusta, 1500</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Clínica Vitalis. Todos os direitos reservados. — Site fictício para demonstração.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Chat widget -->
+<div class="chat-widget">
+  <div class="chat-frame" id="chatFrame">
+    <iframe src="https://medbook-amber.vercel.app/chat/embed" title="Chat MedBook"></iframe>
+  </div>
+  <button class="chat-toggle" id="chatToggle" onclick="toggleChat()" aria-label="Abrir chat">💬</button>
+</div>
+
+<script>
+function toggleChat() {
+  var frame = document.getElementById('chatFrame');
+  var btn = document.getElementById('chatToggle');
+  frame.classList.toggle('open');
+  btn.classList.toggle('open');
+  if (frame.classList.contains('open')) {
+    btn.textContent = '✕';
+  } else {
+    btn.textContent = '💬';
+  }
+}
+</script>
+</body>
+</html>

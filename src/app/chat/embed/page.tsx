@@ -6,6 +6,7 @@ import { ChatMessages } from "@/components/chat/ChatMessages";
 interface Message {
   role: "user" | "assistant";
   content: string;
+  timestamp: string;
 }
 
 function getSessionId(): string {
@@ -33,7 +34,7 @@ export default function ChatEmbedPage() {
     if (!text || loading) return;
     setInput("");
 
-    const userMsg: Message = { role: "user", content: text };
+    const userMsg: Message = { role: "user", content: text, timestamp: new Date().toISOString() };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
@@ -46,7 +47,7 @@ export default function ChatEmbedPage() {
       const data = await res.json();
 
       if (data.reply) {
-        const botMsg: Message = { role: "assistant", content: data.reply };
+        const botMsg: Message = { role: "assistant", content: data.reply, timestamp: new Date().toISOString() };
         setMessages((prev) => [...prev, botMsg]);
         if (data.sessionId) {
           setSessionId(data.sessionId);
