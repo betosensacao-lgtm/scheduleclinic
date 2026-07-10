@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { chatSessions, chatMessages } from "@/db/schema";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 export interface DashboardStats {
   totalSessions: number;
@@ -17,63 +17,43 @@ export interface DashboardStats {
   }>;
 }
 
-export async function getDashboardStats(clinicId?: string): Promise<DashboardStats> {
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+export async function getDashboardStats(): Promise<DashboardStats> {
+  const allSessions = await db.select().from(chatSessions);
+  const allMessages = await db.select().from(chatMessages);
 
-  const hasFilter = !!clinicId;
+  const todayStr = new Date().toISOString().slice(0, 10);
 
-  const [totalSessions] = hasFilter
-    ? await db.select({ value: sql<number>`count(*)::int` }).from(chatSessions).where(eq(chatSessions.clinicId, clinicId!))
-    : await db.select({ value: sql<number>`count(*)::int` }).from(chatSessions);
+  const sessionsToday = allSessions.filter(s => {
+    const d = new Date(s.createdAt);
+    return d.toISOString().slice(0, 10) === todayStr;
+  });
 
-  const [sessionsToday] = hasFilter
-    ? await db.select({ value: sql<number>`count(*)::int` }).from(chatSessions).where(sql`clinic_id = ${clinicId} AND created_at >= ${todayStart}`)
-    : await db.select({ value: sql<number>`count(*)::int` }).from(chatSessions).where(sql`created_at >= ${todayStart}`);
+  const messagesToday = allMessages.filter(m => {
+    const d = new Date(m.createdAt);
+    return d.toISOString().slice(0, 10) === todayStr;
+  });
 
-  const [totalMessages] = await db
-    .select({ value: sql<number>`count(*)::int` })
-    .from(chatMessages);
+  const recent = [...allSessions]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 20);
 
-  const [messagesToday] = await db
-    .select({ value: sql<number>`count(*)::int` })
-    .from(chatMessages)
-    .where(sql`created_at >= ${todayStart}`);
-
-  const rows = hasFilter
-    ? await db.select({
-        sessionId: chatSessions.sessionId,
-        patientName: chatSessions.patientName,
-        patientPhone: chatSessions.patientPhone,
-        patientEmail: chatSessions.patientEmail,
-        createdAt: chatSessions.createdAt,
-      }).from(chatSessions).where(eq(chatSessions.clinicId, clinicId!)).orderBy(desc(chatSessions.createdAt)).limit(20)
-    : await db.select({
-        sessionId: chatSessions.sessionId,
-        patientName: chatSessions.patientName,
-        patientPhone: chatSessions.patientPhone,
-        patientEmail: chatSessions.patientEmail,
-        createdAt: chatSessions.createdAt,
-      }).from(chatSessions).orderBy(desc(chatSessions.createdAt)).limit(20);
-
-  const recentSessions = [];
-  for (const row of rows) {
-    const [msgCount] = await db
-      .select({ value: sql<number>`count(*)::int` })
-      .from(chatMessages)
-      .where(eq(chatMessages.sessionId, row.sessionId));
-
-    recentSessions.push({
-      ...row,
-      messageCount: msgCount?.value ?? 0,
-    });
-  }
+  const recentSessions = recent.map(s => {
+    const msgCount = allMessages.filter(m => m.sessionId === s.sessionId).length;
+    return {
+      sessionId: s.sessionId,
+      patientName: s.patientName ?? null,
+      patientPhone: s.patientPhone ?? null,
+      patientEmail: s.patientEmail ?? null,
+      messageCount: msgCount,
+      createdAt: s.createdAt,
+    };
+  });
 
   return {
-    totalSessions: totalSessions?.value ?? 0,
-    sessionsToday: sessionsToday?.value ?? 0,
-    totalMessages: totalMessages?.value ?? 0,
-    messagesToday: messagesToday?.value ?? 0,
+    totalSessions: allSessions.length,
+    sessionsToday: sessionsToday.length,
+    totalMessages: allMessages.length,
+    messagesToday: messagesToday.length,
     recentSessions,
   };
 }
