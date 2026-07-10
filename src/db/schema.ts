@@ -233,6 +233,9 @@ export const chatSessions = pgTable("chat_sessions", {
   sessionId: text("session_id").notNull().unique(),
   clinicId: text("clinic_id"),
   userIdentifier: text("user_identifier"),
+  patientName: text("patient_name"),
+  patientPhone: text("patient_phone"),
+  patientEmail: text("patient_email"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

@@ -2,6 +2,51 @@ import { NextRequest, NextResponse } from "next/server";
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
 import { runChatGraph } from "@/lib/langgraph/graph";
 import { getOrCreateSession, getChatMessages, saveChatMessage } from "@/lib/chat/session";
+import { db } from "@/db";
+import { chatSessions } from "@/db/schema";
+import { eq } from "drizzle-orm";
+
+const NAME_PATTERNS = [
+  /meu nome (?:é|e) (.+?)(?:,|\.|!|\?|$)/i,
+  /me chamo (.+?)(?:,|\.|!|\?|$)/i,
+  /sou (.+?)(?:,|\.|!|\?|$)/i,
+];
+
+const PHONE_PATTERNS = [
+  /\(?\d{2}\)?\s?\d{4,5}-?\d{4}/g,
+];
+
+function extractName(text: string): string | null {
+  for (const pattern of NAME_PATTERNS) {
+    const match = text.match(pattern);
+    if (match) return match[1].trim();
+  }
+  return null;
+}
+
+function extractPhone(text: string): string | null {
+  const digits = text.replace(/\D/g, "");
+  if (digits.length >= 10 && digits.length <= 11) {
+    return digits;
+  }
+  return null;
+}
+
+async function updatePatientInfo(sessionId: string) {
+  const messages = await getChatMessages(sessionId);
+  const userMessages = messages.filter(m => m.role === "user");
+  const allText = userMessages.map(m => m.content).join(" ");
+
+  const name = extractName(allText);
+  const phone = extractPhone(allText);
+
+  if (name || phone) {
+    const update: Record<string, string> = {};
+    if (name) update.patientName = name;
+    if (phone) update.patientPhone = phone;
+    await db.update(chatSessions).set(update).where(eq(chatSessions.sessionId, sessionId));
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,6 +81,8 @@ export async function POST(request: NextRequest) {
 
     await saveChatMessage(sessionId, "user", message);
     await saveChatMessage(sessionId, "assistant", reply);
+
+    await updatePatientInfo(sessionId);
 
     return NextResponse.json({ reply, sessionId });
   } catch (error) {
