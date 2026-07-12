@@ -78,6 +78,9 @@ export const pricingPlans = pgTable("pricing_plans", {
   maxProfessionals: integer("max_professionals"), // null = unlimited
   maxConversationsMonthly: integer("max_conversations_monthly"), // null = unlimited
   features: jsonb("features").$type<string[]>().notNull().default([]),
+  stripeProductId: text("stripe_product_id"),
+  stripePriceIdMonthly: text("stripe_price_id_monthly"),
+  stripePriceIdYearly: text("stripe_price_id_yearly"),
   highlighted: boolean("highlighted").notNull().default(false),
   sortOrder: integer("sort_order").notNull().default(0),
   isActive: boolean("is_active").notNull().default(true),

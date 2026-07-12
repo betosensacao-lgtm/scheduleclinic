@@ -13,6 +13,8 @@
 | `pnpm db:studio` | Drizzle Studio (navegador de dados) |
 | `pnpm seed-plans` | Popula tabela `pricing_plans` (3 tiers) |
 | `pnpm seed-demo` | Cria 20 sessoes de chat demo para testes |
+| `pnpm seed-admin` | Cria/atualiza admin user no banco |
+| `pnpm seed-stripe-products` | Cria produtos e precos no Stripe + atualiza DB |
 
 ## Framework & toolchain
 
@@ -34,6 +36,11 @@
 /api/chat           → POST endpoint do chat (message + sessionId → reply)
 /api/webhook        → Webhook Meta (GET verify — preparado, nao ativo)
 /api/health         → Health check (DB + tabelas + RLS)
+/api/stripe/create-checkout-session → POST: cria sessao Stripe Checkout
+/api/stripe/create-portal-session   → POST: cria sessao Stripe Customer Portal
+/api/stripe/webhook                 → POST: webhook Stripe (assinaturas, pagamentos)
+/pricing            → Pagina publica de planos e precos
+/admin/billing      → Pagina de faturamento e assinatura
 ```
 
 ## Pontos de atencao
