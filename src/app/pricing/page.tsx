@@ -180,7 +180,7 @@ export default function PricingPage() {
                   </ul>
 
                   <Link
-                    href={plan.slug === "enterprise" ? "#" : `/admin/login`}
+                    href={plan.slug === "enterprise" ? "#" : `/admin/signup`}
                     className={`block text-center font-sora font-semibold text-sm py-3.5 rounded-xl transition-all duration-200 active:scale-[0.97] ${
                       plan.slug === "enterprise"
                         ? "bg-transparent text-[#0A9396] border-[1.5px] border-[#0A9396]/40 hover:bg-[#E3F2F2] cursor-default"

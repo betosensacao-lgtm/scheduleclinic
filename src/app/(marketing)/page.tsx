@@ -231,7 +231,7 @@ export default function MarketingPage() {
                   {l.label}
                 </a>
               ))}
-              <a href="#pricing" className="btn-primary text-sm !px-5 !py-2.5">
+              <a href="/admin/signup" className="btn-primary text-sm !px-5 !py-2.5">
                 Comece Grátis
               </a>
             </div>
@@ -267,7 +267,7 @@ export default function MarketingPage() {
                 {l.label}
               </a>
             ))}
-            <a href="#pricing" className="btn-primary text-sm mt-2 block text-center">
+            <a href="/admin/signup" className="btn-primary text-sm mt-2 block text-center">
               Comece Grátis
             </a>
           </div>
@@ -300,7 +300,7 @@ export default function MarketingPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <a href="#pricing" className="btn-primary text-base text-center">
+                <a href="/admin/signup" className="btn-primary text-base text-center">
                   Testar 14 Dias Grátis
                 </a>
                 <a href="#features" className="btn-outline text-base text-center">
@@ -642,7 +642,7 @@ export default function MarketingPage() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <a
-                    href="#"
+                    href="/admin/signup"
                     className="inline-block bg-[#0A9396] text-white font-sora font-semibold text-base px-8 py-4 rounded-xl hover:bg-[#007678] active:scale-[0.97] transition-all duration-200 shadow-teal"
                   >
                     Começar Teste Grátis

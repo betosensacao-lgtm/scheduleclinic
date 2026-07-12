@@ -97,10 +97,14 @@ Landing page redesenhada, precificacao implementada, admin funcional com dados d
 - Colunas adicionadas ao schema: `stripe_product_id`, `stripe_price_id_monthly`, `stripe_price_id_yearly` em `pricing_plans`
 - **Precisa**: `STRIPE_SECRET_KEY` e `STRIPE_WEBHOOK_SECRET` no .env.local + Vercel
 
-### 4. Onboarding de nova clinica
-- Pagina de signup publica (nao so admin fixo)
-- Fluxo: cadastro → escolher plano → pagamento → configurar chat
-- Criacao automatica de `clinic` + `admin user`
+### 4. Onboarding de nova clinica ✅
+- Pagina `/admin/signup` com formulario completo (nome, email, senha, clinica, especialidade, telefone)
+- API `POST /api/admin/signup` — cria `users` + `clinics` + `adminUsers` em transacao, auto-login
+- Middleware (`src/middleware.ts`) ativo — protege `/admin/*`, exceto login/signup/forgot/reset
+- Login page tem link para cadastro
+- Landing page CTAs apontam para `/admin/signup`
+- Checkout e portal usam `clinicId` da sessao JWT, nao mais env var hardcoded
+- API `GET /api/admin/me` — retorna usuario logado a partir do cookie
 
 ### 5. Landing page SEO
 - Meta tags, OG image, descricao

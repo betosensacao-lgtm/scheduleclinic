@@ -22,12 +22,12 @@ async function verifySessionToken(token: string): Promise<SessionPayload | null>
   }
 }
 
-export default async function proxy(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Public routes — no auth required
   if (
     pathname === "/admin/login" ||
+    pathname === "/admin/signup" ||
     pathname === "/admin/forgot-password" ||
     pathname === "/admin/reset-password"
   ) {
@@ -48,7 +48,6 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Pass session info via headers for server components
   const response = NextResponse.next();
   response.headers.set("x-user-id", session.userId);
   response.headers.set("x-user-email", session.email);

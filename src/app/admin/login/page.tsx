@@ -106,13 +106,19 @@ function LoginForm() {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 space-y-3 text-center">
             <Link
               href="/admin/forgot-password"
-              className="text-sm text-teal-600 hover:text-teal-700 hover:underline"
+              className="block text-sm text-teal-600 hover:text-teal-700 hover:underline"
             >
               Esqueceu a senha?
             </Link>
+            <p className="text-sm text-gray-500">
+              Nao tem conta?{" "}
+              <Link href="/admin/signup" className="text-teal-600 font-medium hover:underline">
+                Cadastre-se gratis
+              </Link>
+            </p>
           </div>
         </div>
       </div>

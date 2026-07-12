@@ -31,10 +31,14 @@
 /                   → redirect para /admin
 /admin              → Visao de agendamentos (Google Calendar)
 /admin/contexto     → Gestao da base de conhecimento da IA
+/admin/billing      → Pagina de faturamento e assinatura
 /chat               → Chat web standalone
 /chat/embed         → Chat embed (iframe snippet)
 /api/chat           → POST endpoint do chat (message + sessionId → reply)
 /api/webhook        → Webhook Meta (GET verify — preparado, nao ativo)
+/admin/signup       → Cadastro publico de nova clinica
+/api/admin/signup   → POST: cria clinica + admin + auto-login
+/api/admin/me       → GET: retorna usuario logado
 /api/health         → Health check (DB + tabelas + RLS)
 /api/stripe/create-checkout-session → POST: cria sessao Stripe Checkout
 /api/stripe/create-portal-session   → POST: cria sessao Stripe Customer Portal
@@ -47,7 +51,7 @@
 
 - **`strict: false`** no `tsconfig.json` — tipos relaxados, mas evite `any`.
 - **`ignoreBuildErrors: true`** no `next.config.ts` — build nunca falha por TS, mas erros aparecem no log.
-- **Middleware** (`src/proxy.ts`) tem `matcher: []` — nunca executa. Se for ativar, lembrar de adicionar os paths.
+- **Middleware** (`src/middleware.ts`) protege rotas `/admin/:path*`. Rotas publicas: login, signup, forgot/reset password. Le o cookie `admin_session` e valida JWT.
 - **README.md** descreve arquitetura SaaS antiga (Stripe, Resend, i18n, cron reminders). Projeto real e chatbot web-first com Google Calendar.
 - **Schema** (`src/db/schema.ts`) ainda tem colunas legadas: `stripeCustomerId`, `subscriptionId`, `supabaseId`. Nao sao usadas mas estao no banco.
 - **`src/lib/langgraph/persistence.ts`** exporta SqliteSaver mas `graph.ts` usa `MemorySaver` direto. O persistence nao esta conectado.

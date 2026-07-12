@@ -3,13 +3,19 @@ import { createPortalSession } from "@/lib/stripe";
 import { db } from "@/db";
 import { clinics } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { verifySessionToken, COOKIE_NAME } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    const clinicId = process.env.CLINIC_ID;
-    if (!clinicId) {
-      return NextResponse.json({ error: "CLINIC_ID not configured" }, { status: 500 });
+    const cookie = request.cookies.get(COOKIE_NAME);
+    if (!cookie) {
+      return NextResponse.json({ error: "Nao autenticado" }, { status: 401 });
     }
+    const session = await verifySessionToken(cookie.value);
+    if (!session || !session.clinicId) {
+      return NextResponse.json({ error: "Nao autenticado" }, { status: 401 });
+    }
+    const clinicId = session.clinicId;
 
     const [clinic] = await db
       .select()

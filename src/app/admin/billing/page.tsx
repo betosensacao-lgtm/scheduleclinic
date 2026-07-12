@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 interface Plan {
@@ -49,31 +49,37 @@ export default function BillingPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const [clinicRes, plansRes] = await Promise.all([
-          fetch("/api/admin/clinics").then((r) => r.json()),
-          fetch("/api/admin/plans").then((r) => r.json()),
-        ]);
+  const loadData = useCallback(async () => {
+    try {
+      const [meRes, clinicRes, plansRes] = await Promise.all([
+        fetch("/api/admin/me"),
+        fetch("/api/admin/clinics"),
+        fetch("/api/admin/plans"),
+      ]);
 
-        const clinicsData = Array.isArray(clinicRes) ? clinicRes : clinicRes.clinics || [];
-        const plansData = Array.isArray(plansRes) ? plansRes : plansRes.plans || [];
+      const me = await meRes.json();
+      const clinicsData = Array.isArray(clinicRes) ? await clinicRes.json() : await clinicRes.json();
+      const plansData = Array.isArray(plansRes) ? await plansRes.json() : await plansRes.json();
 
-        setPlans(plansData);
+      const allClinics = Array.isArray(clinicsData) ? clinicsData : clinicsData.clinics || [];
+      const allPlans = Array.isArray(plansData) ? plansData : plansData.plans || [];
 
-        const clinicId = process.env.NEXT_PUBLIC_CLINIC_ID || "";
-        if (clinicsData.length > 0) {
-          setClinic(clinicsData[0]);
-        }
-      } catch (err) {
-        console.error("Failed to load billing data", err);
-      } finally {
-        setLoading(false);
-      }
+      setPlans(allPlans);
+
+      const myClinicId = me.user?.clinicId;
+      const found = myClinicId
+        ? allClinics.find((c: any) => c.id === myClinicId)
+        : allClinics[0];
+
+      if (found) setClinic(found);
+    } catch (err) {
+      console.error("Failed to load billing data", err);
+    } finally {
+      setLoading(false);
     }
-    load();
   }, []);
+
+  useEffect(() => { loadData(); }, [loadData]);
 
   async function handleSubscribe(planId: string, billingCycle: string) {
     setCheckoutLoading(true);
