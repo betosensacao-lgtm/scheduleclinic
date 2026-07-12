@@ -1,23 +1,22 @@
-import { Syne, DM_Sans } from "next/font/google";
+import { Sora, Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { Toaster } from "sonner";
 
-const syne = Syne({
+const sora = Sora({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-sora",
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600"],
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt" className={`${syne.variable} ${dmSans.variable}`}>
+    <html lang="pt" className={`${sora.variable} ${inter.variable}`}>
       <body className="antialiased">
         {children}
         <Toaster richColors position="top-right" />

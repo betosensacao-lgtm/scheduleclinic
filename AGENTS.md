@@ -11,6 +11,8 @@
 | `pnpm db:generate` | Gera migration SQL com Drizzle Kit |
 | `pnpm db:migrate` | Aplica migrations no banco |
 | `pnpm db:studio` | Drizzle Studio (navegador de dados) |
+| `pnpm seed-plans` | Popula tabela `pricing_plans` (3 tiers) |
+| `pnpm seed-demo` | Cria 20 sessoes de chat demo para testes |
 
 ## Framework & toolchain
 

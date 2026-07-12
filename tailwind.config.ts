@@ -10,8 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        syne: ["var(--font-syne)", "sans-serif"],
-        dm: ["var(--font-dm-sans)", "sans-serif"],
+        sora: ["var(--font-sora)", "sans-serif"],
+        inter: ["var(--font-inter)", "sans-serif"],
       },
       colors: {
         teal: {
