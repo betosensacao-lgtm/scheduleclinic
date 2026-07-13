@@ -54,6 +54,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }
 
+  const isPublicPage = pathname === "/admin/login" ||
+    pathname === "/admin/signup" ||
+    pathname === "/admin/forgot-password" ||
+    pathname === "/admin/reset-password";
+
+  if (isPublicPage) {
+    return <>{children}</>;
+  }
+
   const navItems = [...NAV_ITEMS_BASE];
 
   if (user?.role === "super_admin") {
