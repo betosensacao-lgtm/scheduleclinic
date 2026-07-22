@@ -17,21 +17,9 @@ let _checkpointer: BaseCheckpointSaver | null = null;
 
 export function getCheckpointer(): BaseCheckpointSaver {
   if (!_checkpointer) {
-    try {
-      const { SqliteSaver } = require("@langchain/langgraph-checkpoint-sqlite");
-      const dbDir = path.join(process.cwd(), "data");
-      if (!fs.existsSync(dbDir)) {
-        fs.mkdirSync(dbDir, { recursive: true });
-      }
-      const dbPath = path.join(dbDir, "langgraph.db");
-      _checkpointer = SqliteSaver.fromConnString(dbPath);
-      console.log(`[Persistence] SqliteSaver conectado: ${dbPath}`);
-    } catch (error) {
-      console.warn("[Persistence] Erro ao inicializar SqliteSaver, usando MemorySaver:", error);
-      const { MemorySaver } = require("@langchain/langgraph");
-      _checkpointer = new MemorySaver();
-      console.log("[Persistence] MemorySaver fallback (in-memory)");
-    }
+    const { MemorySaver } = require("@langchain/langgraph");
+    _checkpointer = new MemorySaver();
+    console.log("[Persistence] MemorySaver conectado (in-memory)");
   }
   return _checkpointer;
 }
