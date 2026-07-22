@@ -186,14 +186,22 @@ export function createGroqChatModel(params?: {
   temperature?: number;
   maxTokens?: number;
 }) {
-  const apiKey = process.env.GROQ_API_KEY?.trim();
+  const openrouterKey = process.env.OPENROUTER_API_KEY?.trim();
+  const apiKey = openrouterKey || process.env.GROQ_API_KEY?.trim();
+  const baseURL = openrouterKey
+    ? "https://openrouter.ai/api/v1"
+    : "https://api.groq.com/openai/v1";
+  const model = openrouterKey
+    ? (process.env.OPENROUTER_MODEL?.trim() || "openrouter/free")
+    : (process.env.GROQ_MODEL?.trim() || "llama-3.3-70b-versatile");
+
   return new ChatOpenAI({
-    model: process.env.GROQ_MODEL?.trim() || "meta-llama/llama-4-scout-17b-16e-instruct",
+    model,
     temperature: params?.temperature ?? 0.3,
     maxTokens: params?.maxTokens ?? 1024,
     apiKey: apiKey ?? "missing-key",
     configuration: {
-      baseURL: "https://api.groq.com/openai/v1",
+      baseURL,
     },
   });
 }

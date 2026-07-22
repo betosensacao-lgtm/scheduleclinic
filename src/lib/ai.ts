@@ -9,13 +9,19 @@ let _ai: OpenAI | null = null;
 
 function getAI(): OpenAI {
   if (!_ai) {
+    const openrouterKey = process.env.OPENROUTER_API_KEY?.trim();
     const apiKey =
+      openrouterKey ||
       process.env.GROQ_API_KEY?.trim() ||
       process.env.MEDBOOK_GROQ_API_KEY?.trim();
     
+    const baseURL = openrouterKey
+      ? "https://openrouter.ai/api/v1"
+      : "https://api.groq.com/openai/v1";
+
     _ai = new OpenAI({
       apiKey: apiKey ?? "missing-key",
-      baseURL: "https://api.groq.com/openai/v1",
+      baseURL,
       defaultHeaders: {
         "Accept-Charset": "utf-8",
       },
@@ -32,7 +38,9 @@ export const ai = new Proxy({} as OpenAI, {
 
 // Model used for the conversational triage chat (good instruction-following).
 export const CHAT_MODEL =
-  process.env.GROQ_MODEL?.trim() || "meta-llama/llama-4-scout-17b-16e-instruct";
+  process.env.OPENROUTER_API_KEY?.trim()
+    ? (process.env.OPENROUTER_MODEL?.trim() || "openrouter/free")
+    : (process.env.GROQ_MODEL?.trim() || "llama-3.3-70b-versatile");
 
 // Model used for the final structured JSON extraction (same default).
 export const EXTRACTION_MODEL =
